@@ -1,29 +1,30 @@
-let utils = require('utils');
-let roleHarvester = require('role.harvester');
+'use strict';
 
-let harvestAttributes = [WORK, CARRY, MOVE];
-let harvestCost = utils.creepCost(harvestAttributes);
+const RoomManager = require('RoomManager');
 
-let randomName = function () {
-    return Math.random().toString(36).substring(7);
+const loop = function () {
+    const rooms = Game.rooms;
+    for(const roomName in rooms) {
+        if(rooms.hasOwnProperty(roomName)) {
+            const room = rooms[roomName];
+            processRoom(room);
+        }
+    }
 };
 
-let loop = function () {
-    const spawn = Game.spawns['Spawn1'];
-    const room = spawn.room;
-    const creeps = Game.creeps;
+/**
+ * @param {Room} room
+ */
+const processRoom = function (room) {
+    const roomManager = Memory.roomManager || RoomManager.of(room);
 
-    const sources = room.find(FIND_SOURCES);
-    if (spawn.energy >= harvestCost) {
-        spawn.spawnCreep(harvestAttributes, randomName());
-
+    for (let sourceManager of roomManager.sourceManagers) {
+        for (const spot of sourceManager.spots) {
+            spot.createFlag();
+        }
     }
 
-    for (const i in creeps) {
-        const creep = creeps[i];
-        roleHarvester.run(creep, spawn, sources[0]);
-    }
-
+    Memory.roomManager = roomManager;
 };
 
 // noinspection JSUnusedGlobalSymbols
