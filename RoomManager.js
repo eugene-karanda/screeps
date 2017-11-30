@@ -3,7 +3,6 @@
 const SourceManager = require('SourceManager');
 
 /**
- *
  * @param {Room} room
  * @return [Source]
  */
@@ -18,7 +17,15 @@ class RoomManager {
      * @param {Array<SourceManager>}sourceManagers
      */
     constructor(room, sourceManagers) {
+
+        /**
+         * @type {Room}
+         */
         this.room = room;
+
+        /**
+         * @type {Array<SourceManager>}
+         */
         this.sourceManagers = sourceManagers;
     }
 

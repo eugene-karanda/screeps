@@ -1,12 +1,12 @@
 'use strict';
 
+const SpotManager = require('SpotManager');
+
 /**
  * @param {Source} source
  * @return {Array<RoomPosition>}
  */
 const findSpots = function(source) {
-    console.log('Calculating spot');
-
     const sourcePos = source.pos;
     const room = source.room;
 
@@ -38,11 +38,20 @@ class SourceManager {
 
     /**
      * @param {Source} source
-     * @param {Array<RoomPosition>} spots
+     * @param {Array<SpotManager>} spotManagers
      */
-    constructor(source, spots) {
+    constructor(source, spotManagers) {
+        /**
+         *
+         * @type {Source}
+         */
         this.source = source;
-        this.spots = spots;
+
+        /**
+         *
+         * @type {Array<SpotManager>}
+         */
+        this.spotManagers = spotManagers;
     }
 
     /**
@@ -51,8 +60,11 @@ class SourceManager {
      * @return {SourceManager}
      */
     static of(source) {
-        const spots = findSpots(source);
-        return new SourceManager(source, spots);
+        return new SourceManager(
+            source,
+            findSpots(source)
+                .map(spot => SpotManager.of(spot))
+        );
     }
 }
 

@@ -1,31 +1,31 @@
 'use strict';
 
-class Utils {
+const utils = {
 
-    static creepCost(parts) {
+    creepCost: function(parts) {
         return parts
             .map(part => BODYPART_COST[part])
-            .reduce((sum, c) => sum + c, 0)
-    };
+            .reduce((sum, c) => sum + c, 0);
+    },
 
     /**
      *
      * @param {Array<string>} parts
      * @returns {number}
      */
-    static spawnTime(parts) {
+    spawnTime: function(parts) {
         return CREEP_SPAWN_TIME * parts.length;
-    };
+    },
 
-    static moveTime() {
+    moveTime: function() {
 
-    };
+    },
 
-    static randomName() {
+    randomName: function() {
         return Math.random()
             .toString(36)
             .substring(7);
-    };
-}
+    }
+};
 
-module.exports = Utils;
+module.exports = utils;

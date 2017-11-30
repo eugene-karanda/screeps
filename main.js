@@ -1,6 +1,7 @@
 'use strict';
 
 const RoomManager = require('RoomManager');
+const RoomManagerMemory = require('RoomManagerMemory');
 
 const loop = function () {
     const rooms = Game.rooms;
@@ -16,15 +17,17 @@ const loop = function () {
  * @param {Room} room
  */
 const processRoom = function (room) {
-    const roomManager = Memory.roomManager || RoomManager.of(room);
+    const roomManager = (Memory.roomManagerMemory) ?
+        RoomManagerMemory.restore(Memory.roomManagerMemory) :
+        RoomManager.of(room);
 
     for (let sourceManager of roomManager.sourceManagers) {
-        for (const spot of sourceManager.spots) {
-            spot.createFlag();
+        for (const spotManager of sourceManager.spotManagers) {
+            spotManager.mark();
         }
     }
 
-    Memory.roomManager = roomManager;
+    Memory.roomManagerMemory = RoomManagerMemory.store(roomManager);
 };
 
 // noinspection JSUnusedGlobalSymbols
